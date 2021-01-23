@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+function elastic_search_help() {
+  cat << EOF
+Returns search hits that match the query defined in the request
+
+Usage
+  elastic [<options>] search <index> [<query>]
+
+Examples
+  elastic --cluster http://mycluster:9200 \\
+    search my-index/ '{"query": {...}}'
+
+See 'elastic help' for available options.
+EOF
+}
+
+function elastic_search() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  QUERY="$2"
+
+  if [ -z "$QUERY" ]; then
+    post $INDEX/_search
+  else
+    post $INDEX/_search --data "$QUERY"
+  fi
+}
