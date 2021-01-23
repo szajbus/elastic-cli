@@ -26,6 +26,9 @@ while [[ $# -gt 0 ]]; do
       DRY_RUN=1; shift
       VERBOSE=1
       ;;
+    -h|--help)
+      CMD="help"; shift
+      ;;
     *)
       if [[ -z $CMD ]]; then
         CMD="$1";

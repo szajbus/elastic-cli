@@ -2,28 +2,24 @@
 
 function elastic_document_help() {
   cat << EOF
-Operations on documents
-
-Usage
+Usage:
   elastic [<options>] document <subcommand> [<args>]
 
 Single document APIs
-  get <index> <id>                  Retrieves the specified JSON document from an index
-  delete <index> <id>               Removes a JSON document from the specified index
-  index <index> <body>              Creates new document in an index with auto-generated id
-  insert <index> <id> <body>        Creates new document in an index
-  upsert <index> <id> <body>        Creates new or replaces exising document in an index
-  update <index> <id> <body>        Updates existing document in an index
+  document get <index> <id>               Retrieves the specified JSON document from an index
+  document delete <index> <id>            Removes a JSON document from the specified index
+  document index <index> <body>           Creates new document in an index with auto-generated id
+  document insert <index> <id> <body>     Creates new document in an index
+  document upsert <index> <id> <body>     Creates new or replaces exising document in an index
+  document update <index> <id> <body>     Updates existing document in an index
 
 Multi-document APIs
-  mget <index> <id> [<id>, ...]     Retrieves multiple JSON documents by ID
-  reindex <source> <dest>           Copies documents from a source to a destination in the same cluster
+  document mget <index> <id> [<ids>...]   Retrieves multiple JSON documents by ID
+  document reindex <source> <dest>        Copies documents from a source to a destination in the same cluster
 
-Examples
+Examples:
   elastic document insert my-index 55 '{"name": "Joe"}'
   elastic document mget my-index 55 56 57
-
-See 'elastic help' for available options.
 EOF
 }
 

@@ -2,24 +2,17 @@
 
 function elastic_curl_help() {
   cat << EOF
-Make arbitrary requests to Elasticsearch cluster with curl
-
-Usage
+Usage:
   elastic [<options>] curl <subcommand> [<args>]
 
-HTTP Requests
-  get [<path>] [<curl args>]      Makes GET request
-  post [<path>] [<curl args>]     Makes POST request
-  put [<path>] [<curl args>]      Makes PUT request
-  delete [<path>] [<curl args>]   Makes DELETE request
+Arbitrary HTTP requests
+  curl get <path> [<curl args>]           Makes arbitrary GET request
+  curl post <path> [<curl args>]          Makes arbitrary POST request
+  curl put <path> [<curl args>]           Makes arbitrary PUT request
+  curl delete <path> [<curl args>]        Makes arbitrary DELETE request
 
-Examples
-  elastic --cluster http://mycluster:9200 \\
-    post my-index/_search \\
-    -H "Authorization: ..." \\
-    -d '{"query": {...}}'
-
-See 'elastic help' for available options.
+Examples:
+  elastic --cluster http://mycluster:9200 curl post my-index/_search -H "Authorization: ..." -d '{"query": {...}}'
 EOF
 }
 

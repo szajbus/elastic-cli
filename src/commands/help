@@ -7,22 +7,67 @@ function elastic_help() {
     cat << EOF
 Elasticsearch CLI
 
-Usage
-  elastic [--cluster <url>] [--verbose] <command> [<subcommand>] [<args>]
+Usage:
+  elastic [--cluster <url>] [--verbose] [--dry-run] <command> [<subcommand>] [<args>]
 
-Commands
-  alias           Operations on index aliases
-  index           Operations on indices
-  document        Operations on documents
-  search          Searching
-  curl            Arbitrary requests
-
-Options
+Options:
   -c, --cluster   Elasticsearch cluster URL, http://localhost:9200 is default
   -v, --verbose   Print out all curl commands to stderr
   -d, --dry-run   Only print out all curl commands to stderr, without running them
 
-See 'elastic help <command>' for command usage information.
+Available commands:
+
+Index management
+  index list                              Lists all indices
+  index get <index>                       Returns information about one or more indices
+  index create <index> [<body>]           Creates a new index
+  index delete <index>                    Deletes an existing index
+  index open <index>                      Opens a closed index
+  index close <index>                     Closes an index
+
+Mapping management
+  index get_mapping [<index>]             Retrieves mapping definitions for one or more fields
+  index update_mapping <index> <body>     Adds new fields to an existing index
+
+Index settings
+  index get_settings <index> [<setting>]  Returns setting information for one or more indices
+  index update_settings <index> <body>    Changes a dynamic index settings in real time
+
+Index status management
+  index clear_cache [<index>]             Clears the caches of one or more indices
+  index refresh [<index>]                 Refreshes one or more indices
+  index flush [<index>]                   Flushes one or more indices
+  index forcemerge [<index>]              Forces a merge on the shards of one or more indices
+
+Alias management
+  alias list                              Lists all index aliases
+  alias get [<alias>]                     Returns information about one or more index aliases
+  alias add <index> <alias> [<body>]      Creates or updates an index alias
+  alias delete <index> <alias>            Deletes an existing index alias
+  alias switch <alias> <from> <to>        Moves an alias from one index to another
+
+Single document APIs
+  document get <index> <id>               Retrieves the specified JSON document from an index
+  document delete <index> <id>            Removes a JSON document from the specified index
+  document index <index> <body>           Creates new document in an index with auto-generated id
+  document insert <index> <id> <body>     Creates new document in an index
+  document upsert <index> <id> <body>     Creates new or replaces exising document in an index
+  document update <index> <id> <body>     Updates existing document in an index
+
+Multi-document APIs
+  document mget <index> <id> [<ids>...]   Retrieves multiple JSON documents by ID
+  document reindex <source> <dest>        Copies documents from a source to a destination in the same cluster
+
+Search API
+  search <index> [<body>]                 Returns search hits that match the query defined in the request
+
+Arbitrary HTTP requests
+  curl get <path> [<curl args>]           Makes arbitrary GET request
+  curl post <path> [<curl args>]          Makes arbitrary POST request
+  curl put <path> [<curl args>]           Makes arbitrary PUT request
+  curl delete <path> [<curl args>]        Makes arbitrary DELETE request
+
+See 'elastic help <command>' for command usage examples.
 EOF
   else
     shift

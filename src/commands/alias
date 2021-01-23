@@ -2,19 +2,19 @@
 
 function elastic_alias_help() {
   cat << EOF
-Operations on index aliases
-
-Usage
+Usage:
   elastic [<options>] alias <subcommand> [<args>]
 
 Alias management
-  list                          Lists all index aliases
-  get [<alias>]                 Returns information about one or more index aliases
-  add <index> <alias> [<body>]  Creates or updates an index alias
-  delete <index> <alias>        Deletes an existing index alias
-  switch <alias> <from> <to>    Moves an alias from one index to another
+  alias list                              Lists all index aliases
+  alias get [<alias>]                     Returns information about one or more index aliases
+  alias add <index> <alias> [<body>]      Creates or updates an index alias
+  alias delete <index> <alias>            Deletes an existing index alias
+  alias switch <alias> <from> <to>        Moves an alias from one index to another
 
-See 'elastic help' for available options.
+Examples:
+  elastic alias add my-index my-alias
+  elastic alias switch my-alias old-index new-index
 EOF
 }
 

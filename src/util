@@ -7,7 +7,7 @@ function load_cmd() {
   if [ -f $CMD_PATH ]; then
     source $CMD_PATH
   else
-    echo "elastic: '$CMD' is not a command. See 'elastic help'."
+    echo "'elastic $CMD' is not a command. See 'elastic help'."
     exit 1
   fi
 }
@@ -25,7 +25,7 @@ function run_func() {
   if [ "$EXISTS" == "yes" ]; then
     $FUNC "$@"
   else
-    echo "'$(echo $FUNC | sed 's/_/ /g')' is not a command. See 'elastic index help'."
+    echo "'$(echo $FUNC | sed 's/_/ /g')' is not a command. See 'elastic help'."
   fi
 }
 

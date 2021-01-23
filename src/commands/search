@@ -2,16 +2,14 @@
 
 function elastic_search_help() {
   cat << EOF
-Returns search hits that match the query defined in the request
-
-Usage
+Usage:
   elastic [<options>] search <index> [<query>]
 
-Examples
-  elastic --cluster http://mycluster:9200 \\
-    search my-index/ '{"query": {...}}'
+Search API
+  search <index> [<body>]                 Returns search hits that match the query defined in the request
 
-See 'elastic help' for available options.
+Examples:
+  elastic search my-index/ '{"query": {...}}'
 EOF
 }
 
