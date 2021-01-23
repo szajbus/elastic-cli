@@ -13,6 +13,7 @@ Usage
 Commands
   alias           Operations on index aliases
   index           Operations on indices
+  curl            Arbitrary requests
 
 Options
   -c, --cluster   Elasticsearch cluster URL, http://localhost:9200 is default

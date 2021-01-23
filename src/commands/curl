@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+function elastic_curl_help() {
+  cat << EOF
+Make arbitrary requests to Elasticsearch cluster with curl
+
+Usage
+  elastic [<options>] curl <subcommand> [<args>]
+
+HTTP Requests
+  get [<path>] [<curl args>]      Makes GET request
+  post [<path>] [<curl args>]     Makes POST request
+  put [<path>] [<curl args>]      Makes PUT request
+  delete [<path>] [<curl args>]   Makes DELETE request
+
+Examples
+  elastic --cluster http://mycluster:9200 \\
+    post my-index/_search \\
+    -H "Authorization: ..." \\
+    -d '{"query": {...}}'
+
+See 'elastic help' for available options.
+EOF
+}
+
+function elastic_curl() {
+  SUBCMD="$1"; assert "$SUBCMD" "missing subcommand"; shift
+  FUNC="elastic_curl_${SUBCMD}"
+  run_func $FUNC "$@"
+}
+
+function elastic_curl_get() {
+  get "$@"
+}
+
+function elastic_curl_post() {
+  post "$@"
+}
+
+function elastic_curl_put() {
+  put "$@"
+}
+
+function elastic_curl_delete() {
+  delete "$@"
+}

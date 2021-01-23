@@ -44,7 +44,7 @@ function perform() {
 }
 
 function get() {
-  perform $CURL "$CLUSTER/$1"
+  perform $CURL $CLUSTER/"$@"
 }
 
 function post() {
