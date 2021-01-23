@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+
+function elastic_document_help() {
+  cat << EOF
+Operations on documents
+
+Usage
+  elastic [<options>] document <subcommand> [<args>]
+
+Single document APIs
+  get <index> <id>                  Retrieves the specified JSON document from an index
+  delete <index> <id>               Removes a JSON document from the specified index
+  index <index> <body>              Creates new document in an index with auto-generated id
+  insert <index> <id> <body>        Creates new document in an index
+  upsert <index> <id> <body>        Creates new or replaces exising document in an index
+  update <index> <id> <body>        Updates existing document in an index
+
+Multi-document APIs
+  mget <index> <id> [<id>, ...]     Retrieves multiple JSON documents by ID
+  reindex <source> <dest>           Copies documents from a source to a destination in the same cluster
+
+Examples
+  elastic document insert my-index 55 '{"name": "Joe"}'
+  elastic document mget my-index 55 56 57
+
+See 'elastic help' for available options.
+EOF
+}
+
+function elastic_document() {
+  SUBCMD="$1"; assert "$SUBCMD" "missing subcommand"; shift
+  FUNC="elastic_document_${SUBCMD}"
+  run_func $FUNC "$@"
+}
+
+function elastic_document_get() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  ID="$2"; assert "$ID" "missing id argument"
+  get $INDEX/_doc/$ID
+}
+
+function elastic_document_delete() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  ID="$2"; assert "$ID" "missing id argument"
+  delete $INDEX/_doc/$ID
+}
+
+function elastic_document_index() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  BODY="$2"; assert "$BODY" "missing body argument"
+  post $INDEX/_doc --data "$BODY"
+}
+
+function elastic_document_insert() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  ID="$2"; assert "$ID" "missing index argument"
+  BODY="$3"; assert "$BODY" "missing body argument"
+  put $INDEX/_create/$ID --data "$BODY"
+}
+
+function elastic_document_upsert() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  ID="$2"; assert "$ID" "missing index argument"
+  BODY="$3"; assert "$BODY" "missing body argument"
+  put $INDEX/_doc/$ID --data "$BODY"
+}
+
+function elastic_document_update() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  ID="$2"; assert "$ID" "missing index argument"
+  BODY="$3"; assert "$BODY" "missing body argument"
+  post $INDEX/_update/$ID --data "$BODY"
+}
+
+function elastic_document_mget() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"; shift
+  assert "$1" "missing id argument"
+  IDS=()
+
+  while [[ $# -gt 0 ]]; do
+    IDS+=("\"$1\"")
+    shift
+  done
+
+  set -- "${IDS[@]}"
+  IDS=$(printf ", %s" "${IDS[@]}")
+  IDS=${IDS:2}
+
+  BODY="{\"ids\": [${IDS}]}"
+  post $INDEX/_mget --data "$BODY"
+}
+
+function elastic_document_reindex() {
+  SOURCE="$1"; assert "$SOURCE" "missing source argument"
+  DEST="$2"; assert "$DEST" "missing destination argument"
+
+  BODY=$(cat <<JSON
+{
+  "source": { "index": "${SOURCE}" },
+  "dest": { "index": "${DEST}" }
+}
+JSON
+)
+
+  post _reindex --data "$BODY"
+}

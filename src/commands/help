@@ -13,6 +13,7 @@ Usage
 Commands
   alias           Operations on index aliases
   index           Operations on indices
+  document        Operations on documents
   search          Searching
   curl            Arbitrary requests
 
