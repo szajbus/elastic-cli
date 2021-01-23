@@ -24,18 +24,10 @@ EOF
 }
 
 function elastic_index() {
-  SUBCMD="$1"
+  SUBCMD="$1"; shift
   SUBCMD=${SUBCMD:-list}
-
-  case $SUBCMD in
-    list|get|delete)
-      shift
-      func="elastic_index_${SUBCMD}"
-      $func "$@"
-      ;;
-    *)
-      echo "elastic index: '$SUBCMD' is not a subcommand. See 'elastic index help'."
-  esac
+  FUNC="elastic_index_${SUBCMD}"
+  run_func $FUNC "$@"
 }
 
 function elastic_index_list() {

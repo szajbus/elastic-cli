@@ -19,18 +19,10 @@ EOF
 }
 
 function elastic_alias() {
-  SUBCMD="$1"
+  SUBCMD="$1"; shift
   SUBCMD=${SUBCMD:-list}
-
-  case $SUBCMD in
-    list|get|add|delete|switch)
-      shift
-      func="elastic_alias_${SUBCMD}"
-      $func "$@"
-      ;;
-    *)
-      echo "elastic alias: '$SUBCMD' is not a subcommand. See 'elastic alias help'."
-  esac
+  FUNC="elastic_alias_${SUBCMD}"
+  run_func $FUNC "$@"
 }
 
 function elastic_alias_list() {
