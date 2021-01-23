@@ -8,9 +8,16 @@ Usage:
   elastic [<options>] index <subcommand> [<args>]
 
 Subcommands:
-  list                    Lists all indices
-  get <index>            Returns information about one or more indices
-  delete <index>          Deletes an existing index
+  list                              Lists all indices
+  get <index>                       Returns information about one or more indices
+  create <index> [<body>]           Creates a new index
+  delete <index>                    Deletes an existing index
+  open <index>                      Opens a closed index
+  close <index>                     Closes an index
+  get_mapping [<index>]             Retrieves mapping definitions for one or more fields
+  update_mapping <index> <body>     Adds new fields to an existing index
+  get_settings <index> [<setting>]  Returns setting information for one or more indices
+  update_settings <index> <body>    Changes a dynamic index settings in real time
 
 See 'elastic help' for available options.
 EOF
@@ -36,11 +43,60 @@ function elastic_index_list() {
 }
 
 function elastic_index_get() {
-  INDEX="$1"
+  INDEX="$1"; assert "$INDEX" "missing index argument"
   get $INDEX
 }
 
+function elastic_index_create() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  BODY="$2"
+
+  if [ -z "$BODY" ]; then
+    put $INDEX
+  else
+    put $INDEX --data "$BODY"
+  fi
+}
+
 function elastic_index_delete() {
-  INDEX="$1"
+  INDEX="$1"; assert "$INDEX" "missing index argument"
   delete $INDEX
+}
+
+function elastic_index_open() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  post $INDEX/_open
+}
+
+function elastic_index_close() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  post $INDEX/_close
+}
+
+function elastic_index_get_mapping() {
+  INDEX="$1"
+
+  if [[ -z "$INDEX" ]]; then
+    get _mapping
+  else
+    get $INDEX/_mapping
+  fi
+}
+
+function elastic_index_update_mapping() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  BODY="$2"; assert "$BODY" "missing body argument"
+  put $INDEX/_mapping --data "$BODY"
+}
+
+function elastic_index_get_settings() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  SETTING="$2"
+  get $INDEX/_settings/$SETTING
+}
+
+function elastic_index_update_settings() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  BODY="$2"; assert "$BODY" "missing body argument"
+  put $INDEX/_settings --data "$BODY"
 }
