@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+CURL="curl --silent"
+
+function load_cmd() {
+  CMD="$1"; shift
+  CMD_PATH="$ELASTIC_ROOT/src/commands/$CMD"
+
+  if [ -f $CMD_PATH ]; then
+    source $CMD_PATH
+  else
+    echo "elastic: '$CMD' is not a command. See 'elastic help'."
+    exit 1
+  fi
+}
+
+function run_cmd() {
+  load_cmd "$@"
+  shift
+  func="elastic_${CMD}"
+  $func "$@"
+}
+
+function assert() {
+  [[ -z "$1" ]] && echo $2 1>&2 && exit 1 || true
+}
+
+function maybe_verbose() {
+  if [[ $VERBOSE = "1" ]]; then
+    (set -x; "$@")
+  else
+    "$@"
+  fi
+}
+
+function get() {
+  maybe_verbose $CURL "$CLUSTER/$1"
+}
+
+function post() {
+  maybe_verbose $CURL -X POST -H "Content-Type: application/json" $CLUSTER/"$@"
+}
+
+function put() {
+  maybe_verbose $CURL -X PUT -H "Content-Type: application/json" $CLUSTER/"$@"
+}
+
+function delete() {
+  maybe_verbose $CURL -X DELETE $CLUSTER/"$@"
+}

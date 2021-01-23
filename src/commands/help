@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+function elastic_help() {
+  CMD="$1"
+
+  if [[ -z "$CMD" ]]; then
+    cat << EOF
+Elasticsearch CLI
+
+Usage:
+  elastic [--cluster <url>] [--verbose] <command> [<subcommand>] [<args>]
+
+Commands:
+  alias           Operations on index aliases
+  index           Operations on indices
+
+Options:
+  -c, --cluster   Elasticsearch cluster URL, http://localhost:9200 is default
+  -v, --verbose   Print out all curl commands to stderr
+
+See 'elastic help <command>' for command usage information.
+EOF
+  else
+    shift
+    load_cmd $CMD "$@"
+    func="elastic_${CMD}_help"
+    $func "$@"
+  fi
+}

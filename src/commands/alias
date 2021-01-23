@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+function elastic_alias_help() {
+  cat << EOF
+Operations on index aliases
+
+Usage:
+  elastic [<options>] alias <subcommand> [<args>]
+
+Subcommands:
+  list                          Lists all index aliases
+  get [<alias>]                 Returns information about one or more index aliases
+  add <index> <alias> [<body>]  Creates or updates an index alias
+  delete <index> <alias>        Deletes an existing index alias
+  switch <alias> <from> <to>    Moves an alias from one index to another
+
+See 'elastic help' for available options.
+EOF
+}
+
+function elastic_alias() {
+  SUBCMD="$1"
+  SUBCMD=${SUBCMD:-list}
+
+  case $SUBCMD in
+    list|get|add|delete|switch)
+      shift
+      func="elastic_alias_${SUBCMD}"
+      $func "$@"
+      ;;
+    *)
+      echo "elastic alias: '$SUBCMD' is not a subcommand. See 'elastic alias help'."
+  esac
+}
+
+function elastic_alias_list() {
+  get _cat/aliases
+}
+
+function elastic_alias_get() {
+  ALIAS="$1"
+  get _alias/$ALIAS
+}
+
+function elastic_alias_add() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  ALIAS="$2"; assert "$ALIAS" "missing alias argument"
+  BODY="$3"
+
+  if [ -z "$BODY" ]; then
+    put $INDEX/_alias/$ALIAS
+  else
+    put $INDEX/_alias/$ALIAS --data "$BODY"
+  fi
+}
+
+function elastic_alias_delete() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  ALIAS="$2"; assert "$ALIAS" "missing alias argument"
+  delete $INDEX/_alias/$ALIAS
+}
+
+function elastic_alias_switch() {
+  ALIAS="$1"; assert "$ALIAS" "missing alias argument"
+  FROM="$2"; assert "$FROM" "missing from argument"
+  TO="$3"; assert "$TO" "missing to argument"
+
+  BODY=$(cat <<JSON
+{
+  "actions": [
+    { "add": { "index": "${TO}", "alias": "${ALIAS}" } },
+    { "remove": { "index": "${FROM}", "alias": "${ALIAS}" } }
+  ]
+}
+JSON
+)
+
+  post _aliases --data "$BODY"
+}

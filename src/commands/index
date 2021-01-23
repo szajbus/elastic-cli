@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+function elastic_index_help() {
+  cat << EOF
+Operations on indices
+
+Usage:
+  elastic [<options>] index <subcommand> [<args>]
+
+Subcommands:
+  list                    Lists all indices
+  get <index>            Returns information about one or more indices
+  delete <index>          Deletes an existing index
+
+See 'elastic help' for available options.
+EOF
+}
+
+function elastic_index() {
+  SUBCMD="$1"
+  SUBCMD=${SUBCMD:-list}
+
+  case $SUBCMD in
+    list|get|delete)
+      shift
+      func="elastic_index_${SUBCMD}"
+      $func "$@"
+      ;;
+    *)
+      echo "elastic index: '$SUBCMD' is not a subcommand. See 'elastic index help'."
+  esac
+}
+
+function elastic_index_list() {
+  get _cat/indices
+}
+
+function elastic_index_get() {
+  INDEX="$1"
+  get $INDEX
+}
+
+function elastic_index_delete() {
+  INDEX="$1"
+  delete $INDEX
+}

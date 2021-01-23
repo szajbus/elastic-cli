@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -e
+
+ELASTIC_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/../ >/dev/null 2>&1 && pwd )"
+
+source "$ELASTIC_ROOT/src/util"
+
+CURL="curl --silent"
+CLUSTER="http://localhost:9200"
+VERBOSE=0
+POSITIONAL=()
+
+while [[ $# -gt 0 ]]; do
+  arg="$1"
+
+  case $arg in
+    -c|--cluster)
+      CLUSTER="$2"; shift; shift
+      ;;
+    -v|--verbose)
+      VERBOSE=1; shift
+      ;;
+    *)
+      if [[ -z $CMD ]]; then
+        CMD="$1";
+      else
+        POSITIONAL+=("$1")
+      fi
+
+      shift
+    ;;
+  esac
+done
+
+CMD=${CMD:-help}
+set -- "${POSITIONAL[@]}"
+
+run_cmd $CMD "$@"
