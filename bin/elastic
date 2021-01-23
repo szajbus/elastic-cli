@@ -6,7 +6,7 @@ ELASTIC_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/../ >/dev/null 2>&1 && pw
 
 source "$ELASTIC_ROOT/src/util"
 
-CURL="curl --silent"
+CURL="curl --silent --show-error"
 CLUSTER="http://localhost:9200"
 VERBOSE=0
 POSITIONAL=()
@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
 
   case $arg in
     -c|--cluster)
-      CLUSTER="$2"; shift; shift
+      CLUSTER="$2"; assert "$CLUSTER" "missing value for --cluster option"; shift; shift
       ;;
     -v|--verbose)
       VERBOSE=1; shift

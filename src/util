@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-CURL="curl --silent"
-
 function load_cmd() {
   CMD="$1"; shift
   CMD_PATH="$ELASTIC_ROOT/src/commands/$CMD"
