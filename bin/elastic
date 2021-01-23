@@ -9,6 +9,7 @@ source "$ELASTIC_ROOT/src/util"
 CURL="curl --silent --show-error"
 CLUSTER="http://localhost:9200"
 VERBOSE=0
+DRY_RUN=0
 POSITIONAL=()
 
 while [[ $# -gt 0 ]]; do
@@ -20,6 +21,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -v|--verbose)
       VERBOSE=1; shift
+      ;;
+    -d|--dry-run)
+      DRY_RUN=1; shift
+      VERBOSE=1
       ;;
     *)
       if [[ -z $CMD ]]; then

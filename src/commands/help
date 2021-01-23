@@ -17,6 +17,7 @@ Commands
 Options
   -c, --cluster   Elasticsearch cluster URL, http://localhost:9200 is default
   -v, --verbose   Print out all curl commands to stderr
+  -d, --dry-run   Only print out all curl commands to stderr, without running them
 
 See 'elastic help <command>' for command usage information.
 EOF

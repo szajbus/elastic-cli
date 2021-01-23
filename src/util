@@ -33,8 +33,10 @@ function assert() {
   [[ -z "$1" ]] && echo $2 1>&2 && exit 1 || true
 }
 
-function maybe_verbose() {
-  if [[ $VERBOSE = "1" ]]; then
+function perform() {
+  if [[ $DRY_RUN = "1" ]]; then
+    echo "+ $@"
+  elif [[ $VERBOSE = "1" ]]; then
     (set -x; "$@")
   else
     "$@"
@@ -42,17 +44,17 @@ function maybe_verbose() {
 }
 
 function get() {
-  maybe_verbose $CURL "$CLUSTER/$1"
+  perform $CURL "$CLUSTER/$1"
 }
 
 function post() {
-  maybe_verbose $CURL -X POST -H "Content-Type: application/json" $CLUSTER/"$@"
+  perform $CURL -X POST -H "Content-Type: application/json" $CLUSTER/"$@"
 }
 
 function put() {
-  maybe_verbose $CURL -X PUT -H "Content-Type: application/json" $CLUSTER/"$@"
+  perform $CURL -X PUT -H "Content-Type: application/json" $CLUSTER/"$@"
 }
 
 function delete() {
-  maybe_verbose $CURL -X DELETE $CLUSTER/"$@"
+  perform $CURL -X DELETE $CLUSTER/"$@"
 }
