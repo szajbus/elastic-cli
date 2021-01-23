@@ -4,10 +4,10 @@ function elastic_alias_help() {
   cat << EOF
 Operations on index aliases
 
-Usage:
+Usage
   elastic [<options>] alias <subcommand> [<args>]
 
-Subcommands:
+Alias management
   list                          Lists all index aliases
   get [<alias>]                 Returns information about one or more index aliases
   add <index> <alias> [<body>]  Creates or updates an index alias

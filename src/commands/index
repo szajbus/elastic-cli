@@ -4,24 +4,30 @@ function elastic_index_help() {
   cat << EOF
 Operations on indices
 
-Usage:
+Usage
   elastic [<options>] index <subcommand> [<args>]
 
-Subcommands:
+Index management
   list                              Lists all indices
   get <index>                       Returns information about one or more indices
   create <index> [<body>]           Creates a new index
   delete <index>                    Deletes an existing index
   open <index>                      Opens a closed index
   close <index>                     Closes an index
+
+Mapping management
+  get_mapping [<index>]             Retrieves mapping definitions for one or more fields
+  update_mapping <index> <body>     Adds new fields to an existing index
+
+Index settings
+  get_settings <index> [<setting>]  Returns setting information for one or more indices
+  update_settings <index> <body>    Changes a dynamic index settings in real time
+
+Status management
   clear_cache [<index>]             Clears the caches of one or more indices
   refresh [<index>]                 Refreshes one or more indices
   flush [<index>]                   Flushes one or more indices
   forcemerge [<index>]              Forces a merge on the shards of one or more indices
-  get_mapping [<index>]             Retrieves mapping definitions for one or more fields
-  update_mapping <index> <body>     Adds new fields to an existing index
-  get_settings <index> [<setting>]  Returns setting information for one or more indices
-  update_settings <index> <body>    Changes a dynamic index settings in real time
 
 See 'elastic help' for available options.
 EOF
