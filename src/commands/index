@@ -14,6 +14,10 @@ Subcommands:
   delete <index>                    Deletes an existing index
   open <index>                      Opens a closed index
   close <index>                     Closes an index
+  clear_cache [<index>]             Clears the caches of one or more indices
+  refresh [<index>]                 Refreshes one or more indices
+  flush [<index>]                   Flushes one or more indices
+  forcemerge [<index>]              Forces a merge on the shards of one or more indices
   get_mapping [<index>]             Retrieves mapping definitions for one or more fields
   update_mapping <index> <body>     Adds new fields to an existing index
   get_settings <index> [<setting>]  Returns setting information for one or more indices
@@ -67,6 +71,46 @@ function elastic_index_open() {
 function elastic_index_close() {
   INDEX="$1"; assert "$INDEX" "missing index argument"
   post $INDEX/_close
+}
+
+function elastic_index_clear_cache() {
+  INDEX="$1"
+
+  if [ -z "$INDEX" ]; then
+    post _cache/clear
+  else
+    post $INDEX/_cache/clear
+  fi
+}
+
+function elastic_index_refresh() {
+  INDEX="$1"
+
+  if [ -z "$INDEX" ]; then
+    post _refresh
+  else
+    post $INDEX/_refresh
+  fi
+}
+
+function elastic_index_flush() {
+  INDEX="$1"
+
+  if [ -z "$INDEX" ]; then
+    post _flush
+  else
+    post $INDEX/_flush
+  fi
+}
+
+function elastic_index_forcemerge() {
+  INDEX="$1"
+
+  if [ -z "$INDEX" ]; then
+    post _forcemerge
+  else
+    post $INDEX/_forcemerge
+  fi
 }
 
 function elastic_index_get_mapping() {
