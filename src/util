@@ -15,10 +15,9 @@ function load_cmd() {
 }
 
 function run_cmd() {
-  load_cmd "$@"
-  shift
-  FUNC="elastic_${CMD}"
-  $FUNC "$@"
+  CMD="$1"; shift
+  load_cmd $CMD
+  run_func "elastic_${CMD}" "$@"
 }
 
 function run_func() {

@@ -19,8 +19,12 @@ EOF
 }
 
 function elastic_alias() {
-  SUBCMD="$1"; shift
-  SUBCMD=${SUBCMD:-list}
+  if [ $# -eq 0 ]; then
+    SUBCMD="list"
+  else
+    SUBCMD="$1"; shift
+  fi
+
   FUNC="elastic_alias_${SUBCMD}"
   run_func $FUNC "$@"
 }
