@@ -2,7 +2,7 @@
 
 function load_cmd() {
   CMD="$1"; shift
-  CMD_PATH="$ELASTIC_ROOT/src/commands/$CMD"
+  CMD_PATH="$ELASTIC_DIR/src/commands/$CMD"
 
   if [ -f $CMD_PATH ]; then
     source $CMD_PATH
