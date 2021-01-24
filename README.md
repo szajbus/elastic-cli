@@ -1,6 +1,6 @@
 # The Missing Elasticsearch CLI
 
-`elastic-cli` is a command line utility for Elasticsearch.
+`elastic` is a command line utility for Elasticsearch.
 
 It simplifies common operations by wrapping obscure `curl` commands with a friendly API.
 
