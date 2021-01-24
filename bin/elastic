@@ -2,8 +2,6 @@
 
 set -e
 
-VERSION="0.1"
-
 if [[ -z "$ELASTIC_DIR" ]]; then
   self="${BASH_SOURCE[0]}"
   ELASTIC_DIR="$( cd "$( dirname "$self" )"/../ >/dev/null 2>&1 && pwd )"
@@ -32,7 +30,7 @@ while [[ $# -gt 0 ]]; do
       VERBOSE=1
       ;;
     --version)
-      echo "v${VERSION}"
+      cat "$ELASTIC_DIR/VERSION"
       exit 0
       ;;
     -h|--help)
