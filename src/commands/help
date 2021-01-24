@@ -8,14 +8,8 @@ function elastic_help() {
 Elasticsearch CLI
 
 Usage:
-  elastic [--cluster <url>] [--verbose] [--dry-run] <command> [<subcommand>] [<args>]
-
-Options:
-  -c, --cluster   Specify Elasticsearch cluster URL, http://localhost:9200 is default
-  -v, --verbose   Prints out all curl commands to stderr
-  -d, --dry-run   Only prints out all curl commands to stderr, without running them
-  -h, --help      Shows this message
-      --version   Shows version number
+  elastic [--cluster <url>] [--verbose] [--dry-run] [--version] [--help]
+          <command> [<subcommand>] [<args>]
 
 Available commands:
 
@@ -68,6 +62,15 @@ Arbitrary HTTP requests
   curl post <path> [<curl args>]          Makes arbitrary POST request
   curl put <path> [<curl args>]           Makes arbitrary PUT request
   curl delete <path> [<curl args>]        Makes arbitrary DELETE request
+
+Application options:
+  -c, --cluster   Specify Elasticsearch cluster URL, http://localhost:9200 is default
+  -v, --verbose   Prints out all curl commands to stderr
+  -d, --dry-run   Only prints out all curl commands to stderr, without running them
+
+Help options:
+  -h, --help      Shows this message
+      --version   Shows version number
 
 See 'elastic help <command>' for command usage examples.
 EOF
