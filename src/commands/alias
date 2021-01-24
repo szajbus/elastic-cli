@@ -8,8 +8,8 @@ Usage:
 Alias management
   alias list                              Lists all index aliases
   alias get [<alias>]                     Returns information about one or more index aliases
-  alias add <index> <alias> [<body>]      Creates or updates an index alias
-  alias delete <index> <alias>            Deletes an existing index alias
+  alias add <alias> <index> [<body>]      Creates or updates an index alias
+  alias delete <alias> <index>            Deletes an existing index alias
   alias switch <alias> <from> <to>        Moves an alias from one index to another
 
 Examples:
@@ -39,8 +39,8 @@ function elastic_alias_get() {
 }
 
 function elastic_alias_add() {
-  INDEX="$1"; assert "$INDEX" "missing index argument"
-  ALIAS="$2"; assert "$ALIAS" "missing alias argument"
+  ALIAS="$1"; assert "$ALIAS" "missing alias argument"
+  INDEX="$2"; assert "$INDEX" "missing index argument"
   BODY="$3"
 
   if [ -z "$BODY" ]; then
@@ -51,8 +51,8 @@ function elastic_alias_add() {
 }
 
 function elastic_alias_delete() {
-  INDEX="$1"; assert "$INDEX" "missing index argument"
-  ALIAS="$2"; assert "$ALIAS" "missing alias argument"
+  ALIAS="$1"; assert "$ALIAS" "missing alias argument"
+  INDEX="$2"; assert "$INDEX" "missing index argument"
   delete $INDEX/_alias/$ALIAS
 }
 
