@@ -216,7 +216,9 @@ _elastic() {
   _arguments -C -A "-*" : \
     '--cluster[specify cluster URL]:cluster:' \
     '--dry-run[only print out curl commands, without running them]' \
+    '--help[show help]' \
     '--verbose[print out curl commands to stderr]' \
+    '--version[show version]' \
     '(-): :->command' \
     '(-)*:: :->subcommand-or-args' && return 0
 

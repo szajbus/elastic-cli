@@ -2,6 +2,7 @@
 
 set -e
 
+VERSION="0.1"
 ELASTIC_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/../ >/dev/null 2>&1 && pwd )"
 
 source "$ELASTIC_ROOT/src/util"
@@ -25,6 +26,10 @@ while [[ $# -gt 0 ]]; do
     -d|--dry-run)
       DRY_RUN=1; shift
       VERBOSE=1
+      ;;
+    --version)
+      echo "v${VERSION}"
+      exit 0
       ;;
     -h|--help)
       CMD="help"; shift

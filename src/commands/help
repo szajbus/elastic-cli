@@ -11,9 +11,11 @@ Usage:
   elastic [--cluster <url>] [--verbose] [--dry-run] <command> [<subcommand>] [<args>]
 
 Options:
-  -c, --cluster   Elasticsearch cluster URL, http://localhost:9200 is default
-  -v, --verbose   Print out all curl commands to stderr
-  -d, --dry-run   Only print out all curl commands to stderr, without running them
+  -c, --cluster   Specify Elasticsearch cluster URL, http://localhost:9200 is default
+  -v, --verbose   Prints out all curl commands to stderr
+  -d, --dry-run   Only prints out all curl commands to stderr, without running them
+  -h, --help      Shows this message
+      --version   Shows version number
 
 Available commands:
 
