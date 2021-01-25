@@ -196,20 +196,14 @@ _elastic_search() {
 # helper functions
 _elastic__indices() {
   local -a indices
-  local opts
-  if [[ $1 == "--cluster"* ]]; then
-    opts="$1"
-  fi
+  local opts="$1"
   indices=($(elastic $(echo $opts) index list 2>/dev/null | awk '{print $3}'))
   _wanted indices expl 'indices' compadd -a indices
 }
 
 _elastic__aliases() {
   local -a aliases
-  local opts
-  if [[ $1 == "--cluster"* ]]; then
-    opts="$1"
-  fi
+  local opts="$1"
   aliases=($(elastic $(echo $opts) alias list 2>/dev/null | awk '{print $1}'))
   _wanted aliases expl 'aliases' compadd -a aliases
 }
@@ -238,6 +232,10 @@ _elastic() {
 
       if [[ ! -z "${opt_args[--cluster]}" ]]; then
         opts+=("--cluster ${(e)opt_args[--cluster]}")
+      else
+        # Add empty string, so that we always control the first argument
+        # passed to functions that receive $opts
+        opts+=("")
       fi
 
       # change context to e.g. elastic-alias
