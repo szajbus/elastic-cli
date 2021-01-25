@@ -9,6 +9,10 @@ fi
 
 source "$ELASTIC_DIR/src/util"
 
+if [[ "$ELASTIC_DEBUG" = "1" ]]; then
+  echo "$@" > /tmp/elastic-cli.log
+fi
+
 CURL="curl --silent --show-error"
 CLUSTER="http://localhost:9200"
 VERBOSE=0
