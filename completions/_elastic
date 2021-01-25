@@ -196,14 +196,20 @@ _elastic_search() {
 # helper functions
 _elastic__indices() {
   local -a indices
-  local opts=$1
+  local opts
+  if [[ $1 == "--cluster"* ]]; then
+    opts="$1"
+  fi
   indices=($(elastic $(echo $opts) index list 2>/dev/null | awk '{print $3}'))
   _wanted indices expl 'indices' compadd -a indices
 }
 
 _elastic__aliases() {
   local -a aliases
-  local opts=$1
+  local opts
+  if [[ $1 == "--cluster"* ]]; then
+    opts="$1"
+  fi
   aliases=($(elastic $(echo $opts) alias list 2>/dev/null | awk '{print $1}'))
   _wanted aliases expl 'aliases' compadd -a aliases
 }
