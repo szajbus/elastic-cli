@@ -217,7 +217,6 @@ _elastic() {
     '--cluster[specify cluster URL]:cluster:' \
     '--dry-run[only print out curl commands, without running them]' \
     '--help[show help]' \
-    '--pretty[pretty-print JSON responses]' \
     '--verbose[print out curl commands to stderr]' \
     '--version[show version]' \
     '(-): :->command' \

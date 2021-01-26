@@ -152,7 +152,6 @@ Application options:
   -c, --cluster   Specify Elasticsearch cluster URL, http://localhost:9200 is default
   -v, --verbose   Prints out all curl commands to stderr
   -d, --dry-run   Only prints out all curl commands to stderr, without running them
-      --pretty    Pretty-print JSON responses
 
 Help options:
   -h, --help      Shows this message
