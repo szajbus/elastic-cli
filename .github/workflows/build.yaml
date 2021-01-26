@@ -1,0 +1,31 @@
+name: "build"
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install bats
+        run: git clone --depth 1 https://github.com/sstephenson/bats.git
+
+      - name: Configure sysctl limits
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+
+      - name: Setup Elasticsearch
+        uses: elastic/elastic-github-actions/elasticsearch@master
+        with:
+          stack-version: 7.9.3
+
+      - name: Elasticsearch is reachable
+        run: |
+          curl --verbose --show-error http://localhost:9200
+
+      - run: ./bats/bin/bats --tap test
