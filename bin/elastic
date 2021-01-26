@@ -17,6 +17,7 @@ CURL="curl --silent --show-error"
 CLUSTER="http://localhost:9200"
 VERBOSE=0
 DRY_RUN=0
+PRETTY=0
 POSITIONAL=()
 
 while [[ $# -gt 0 ]]; do
@@ -32,6 +33,9 @@ while [[ $# -gt 0 ]]; do
     -d|--dry-run)
       DRY_RUN=1; shift
       VERBOSE=1
+      ;;
+    --pretty)
+      PRETTY=1; shift
       ;;
     --version)
       cat "$ELASTIC_DIR/VERSION"

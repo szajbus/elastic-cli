@@ -44,17 +44,35 @@ function perform() {
 }
 
 function get() {
-  perform $CURL $CLUSTER/"$@"
+  perform $CURL $(url "$@")
 }
 
 function post() {
-  perform $CURL -X POST -H "Content-Type: application/json" $CLUSTER/"$@"
+  perform $CURL -X POST -H "Content-Type: application/json" $(url "$@")
 }
 
 function put() {
-  perform $CURL -X PUT -H "Content-Type: application/json" $CLUSTER/"$@"
+  perform $CURL -X PUT -H "Content-Type: application/json" $(url "$@")
 }
 
 function delete() {
-  perform $CURL -X DELETE $CLUSTER/"$@"
+  perform $CURL -X DELETE $(url "$@")
+}
+
+function url() {
+  local url
+  if [[ $# -gt 0 ]]; then
+    url="$1"; shift
+    if [[ $PRETTY = "1" ]]; then
+      if [[ $url =~ "?" ]]; then
+        url="$url&pretty"
+      else
+        url="$url?pretty"
+      fi
+    fi
+  else
+    url=""
+  fi
+  url=$(echo $url | sed 's/^\/*//')
+  echo "${CLUSTER}/${url} $@"
 }
