@@ -28,10 +28,5 @@ jobs:
         run: |
           curl --verbose --show-error http://localhost:9200
 
-      - run: ./bats/bin/bats --tap test
-
-      - name: Setup tmate session
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
+      - name: Run tests
+        run: ./bats/bin/bats --tap test
