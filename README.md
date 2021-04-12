@@ -169,7 +169,14 @@ Apart from functionality extensions (new APIs), there are some extras that would
 - Shell completions for bash
 - Support for older Elasticsearch versions (< 7)
 - AWS Elasticsearch support
-- Tests
+
+## Development
+
+In order to run tests locally, install [bats](https://github.com/sstephenson/bats) and run:
+
+```shell
+bats test
+```
 
 ## Contributing
 
