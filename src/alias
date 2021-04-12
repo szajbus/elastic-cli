@@ -13,7 +13,7 @@ Alias management
   alias switch <alias> <from> <to>        Moves an alias from one index to another
 
 Examples:
-  elastic alias add my-index my-alias
+  elastic alias add my-alias my-index
   elastic alias switch my-alias old-index new-index
 EOF
 }
