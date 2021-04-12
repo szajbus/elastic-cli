@@ -67,7 +67,7 @@ refute_line() {
   local line
   for line in "${lines[@]}"; do
     if [[ "$line" = *"$1"* ]]; then
-      flunk "expected to not find line matching \`$line'"
+      flunk "expected not to find line matching \`$line'"
     fi
   done
 }
