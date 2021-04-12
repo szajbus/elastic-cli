@@ -1,7 +1,7 @@
 export ELASTIC_INDEX_PREFIX="elastic-cli-test"
 
 gen_name() {
-  local suffix=$(LC_ALL=C tr -dc a-z0-9 </dev/urandom | head -c 8)
+  local suffix=$(head -c 8 <(LC_ALL=C tr -dc a-z0-9 </dev/urandom))
   echo "${ELASTIC_INDEX_PREFIX}-${suffix}"
 }
 
