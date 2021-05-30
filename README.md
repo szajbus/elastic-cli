@@ -142,6 +142,9 @@ Multi-document APIs
 Search API
   search <index> [<body>]                 Returns search hits that match the query defined in the request
 
+Count API
+  count <index> [<body>]                  Counts the documents matching the query defined in the request
+
 Arbitrary HTTP requests
   curl get <path> [<curl args>]           Makes arbitrary GET request
   curl post <path> [<curl args>]          Makes arbitrary POST request
@@ -172,7 +175,7 @@ Apart from functionality extensions (new APIs), there are some extras that would
 
 ## Development
 
-In order to run tests locally, install [bats](https://github.com/sstephenson/bats) and run:
+In order to run tests locally, install [bats](https://github.com/sstephenson/bats) and [jq](https://stedolan.github.io/jq/) and run:
 
 ```shell
 bats test
