@@ -4,6 +4,7 @@ __elastic_commands() {
   local -a commands
   commands=(
     'alias:manage aliases'
+    'count:make count request'
     'curl:make arbitrary HTTP request'
     'document:manage documents'
     'index:manage indices'
@@ -69,6 +70,13 @@ _elastic_alias_switch() {
     ': :_elastic__aliases' \
     ': :_elastic__indices' \
     ': :_elastic__indices' && return 0
+}
+
+_elastic_count() {
+  local curcontext=$curcontext state line
+  _alternative -O opts : \
+    'indices: :_elastic__indices' \
+    'aliases: :_elastic__aliases' && return 0
 }
 
 _elastic_curl() {
