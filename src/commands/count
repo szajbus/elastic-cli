@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+function elastic_count_help() {
+  cat << EOF
+Usage:
+  elastic [<options>] count <index> [<query>]
+
+Count API
+  count <index> [<body>]                 Counts the documents matching the query defined in the request
+
+Examples:
+  elastic count my-index/ '{"query": {...}}'
+EOF
+}
+
+function elastic_count() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  QUERY="$2"
+
+  if [ -z "$QUERY" ]; then
+    post $INDEX/_count
+  else
+    post $INDEX/_count --data "$QUERY"
+  fi
+}

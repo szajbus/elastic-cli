@@ -95,3 +95,14 @@ assert_doc_found() {
   if [[ $? ]]; then return 0; fi
   flunk "expected to find document with id \`$1'"
 }
+
+assert_count() {
+  local count
+
+  count=$(echo $lines | jq ".count")
+  if [[ "$count" == "$1" ]]; then return 0; fi
+
+  { echo "expected document count: $1"
+    echo "actual:                  $count"
+  } | flunk
+}

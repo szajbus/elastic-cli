@@ -57,6 +57,9 @@ Multi-document APIs
 Search API
   search <index> [<body>]                 Returns search hits that match the query defined in the request
 
+Count API
+  count <index> [<body>]                  Counts the documents matching the query defined in the request
+
 Arbitrary HTTP requests
   curl get <path> [<curl args>]           Makes arbitrary GET request
   curl post <path> [<curl args>]          Makes arbitrary POST request
