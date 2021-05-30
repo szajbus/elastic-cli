@@ -77,3 +77,21 @@ assert() {
     flunk "failed: $@"
   fi
 }
+
+assert_total_hits() {
+  local total
+
+  total=$(echo $lines | jq ".hits.total.value")
+  if [[ "$total" == "$1" ]]; then return 0; fi
+
+  { echo "expected total hits: $1"
+    echo "actual:              $total"
+  } | flunk
+}
+
+assert_doc_found() {
+  echo $lines | jq ".hits.hits[]._id" | grep "\"$1\""
+
+  if [[ $? ]]; then return 0; fi
+  flunk "expected to find document with id \`$1'"
+}
