@@ -12,6 +12,9 @@ jobs:
       - name: Install bats
         run: git clone --depth 1 https://github.com/sstephenson/bats.git
 
+      - name: Install jq
+        run: sudo apt-get install jq
+
       - name: Configure sysctl limits
         run: |
           sudo swapoff -a
