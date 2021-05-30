@@ -1,5 +1,7 @@
 # The Missing Elasticsearch CLI
 
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/szajbus/elastic-cli?label=version&sort=semver) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/szajbus/elastic-cli/build/main)
+
 `elastic` is a command line utility for Elasticsearch.
 
 It simplifies common operations by wrapping obscure `curl` commands with a friendly API.
