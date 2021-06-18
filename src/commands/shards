@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+function elastic_shards_help() {
+  cat << EOF
+Usage:
+  elastic [<options>] alias <subcommand> [<args>]
+
+Shards API
+  shards list [<target>]                  Lists all shards for index or alias
+
+Examples:
+  elastic shards list my-index
+EOF
+}
+
+function elastic_shards() {
+  if [ $# -eq 0 ]; then
+    SUBCMD="list"
+  else
+    SUBCMD="$1"; shift
+  fi
+
+  FUNC="elastic_shards_${SUBCMD}"
+  run_func $FUNC "$@"
+}
+
+function elastic_shards_list() {
+  TARGET="$1"
+  get _cat/shards/$TARGET
+}

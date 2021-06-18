@@ -60,6 +60,9 @@ Search API
 Count API
   count <index> [<body>]                  Counts the documents matching the query defined in the request
 
+Shards API
+  shards <target>                         Lists all shards for target
+
 Arbitrary HTTP requests
   curl get <path> [<curl args>]           Makes arbitrary GET request
   curl post <path> [<curl args>]          Makes arbitrary POST request
