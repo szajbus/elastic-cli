@@ -1,0 +1,257 @@
+#compdef elastic_with_logs
+_log() {
+  echo -n $1 >> /Users/michal/dev/elastic-cli/log
+}
+
+_logn() {
+  _log "\n$1"
+}
+
+_bye() {
+  _logn "----------------------------------------\n"
+}
+
+__elastic_commands() {
+  local -a commands
+  commands=(
+    'alias:manage aliases'
+    'curl:make arbitrary HTTP request'
+    'document:manage documents'
+    'index:manage indices'
+    'search:make search request'
+  )
+  _describe -t elastic-commands 'commands' commands
+}
+
+_elastic_alias() {
+  local curcontext=$curcontext state line ret=1
+
+  _arguments -C \
+    ': :->subcommand' \
+    '*:: :->args' && ret=0
+
+  case "$state" in
+    subcommand)
+      local -a subcommands
+      subcommands=(
+        'add:add alias to index'
+        'delete:delete index alias'
+        'get:get specified alias'
+        'list:list all aliases'
+        'switch:move alias from on index to another'
+      )
+      _describe -t elastic-alias-subcommands 'subcommands' subcommands && ret=0
+      ;;
+    args)
+      local subcommand="${line[1]//-/_}"
+      local completion_func="_elastic_${command}_${subcommand}"
+
+      curcontext="${curcontext%:*}-${subcommand}:${curcontext##*:}"
+      _call_function ret "${completion_func}"
+      ;;
+  esac
+
+  return ret
+}
+
+_elastic_alias_add() {
+  local curcontext=$curcontext state line ret=1
+  _arguments -C -O opts : \
+    ': :_elastic__aliases' \
+    ': :_elastic__indices' && return ret
+}
+
+_elastic_alias_delete() {
+  local curcontext=$curcontext state line ret=1
+  _arguments -C -O opts : \
+    ': :_elastic__aliases' \
+    ': :_elastic__indices' && return ret
+}
+
+_elastic_alias_get() {
+  local curcontext=$curcontext state line ret=1
+  _arguments -C -O opts : \
+    ': :_elastic__aliases' && return ret
+}
+
+_elastic_alias_switch() {
+  local curcontext=$curcontext state line ret=1
+  _arguments -C -O opts : \
+    ': :_elastic__aliases' \
+    ': :_elastic__indices' \
+    ': :_elastic__indices' && return ret
+}
+
+_elastic_curl() {
+  local -a subcommands
+  subcommands=(
+    'delete:make DELETE request'
+    'get:make GET request'
+    'post:make POST request'
+    'put:make PUT request'
+  )
+  _describe -t elastic-curl-subcommands 'subcommands' subcommands
+}
+
+_elastic_document() {
+  local curcontext=$curcontext state line ret=1
+
+  _arguments -C \
+    ': :->subcommand' \
+    '*:: :->args' && ret=0
+
+  case "$state" in
+    subcommand)
+      local -a subcommands
+      subcommands=(
+        'delete:delete document from an index'
+        'get:get document from an index'
+        'index:create new document in an index with auto-generated id'
+        'insert:create new document in an index'
+        'mget:get multiple documents from an index'
+        'reindex:copy documents from source to destination index'
+        'update:update exisitng document in an index'
+        'upsert:create new or replace existing document in an index'
+      )
+      _describe -t elastic-document-subcommands 'subcommands' subcommands && ret=0
+      ;;
+    args)
+      local subcommand="${line[1]//-/_}"
+      local completion_func
+      curcontext="${curcontext%:*}-${subcommand}:${curcontext##*:}"
+
+      case $subcommand in
+        reindex)
+          # No completions for reindex
+          ret=1
+          ;;
+        *)
+          _call_function ret "_elastic_${command}_any"
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_elastic_document_any() {
+  local curcontext=$curcontext state line ret=1
+  _alternative -O opts : \
+    'indices: :_elastic__indices' \
+    'aliases: :_elastic__aliases' && return ret
+}
+
+_elastic_index() {
+  local curcontext=$curcontext state line ret=1
+
+  _arguments -C \
+    ': :->subcommand' \
+    '*:: :->args' && ret=0
+
+  case "$state" in
+    subcommand)
+      local -a subcommands
+      subcommands=(
+        'clear_cache:clear cache of one or more indices'
+        'close:close an index'
+        'create:create a new index'
+        'delete:delete exising index'
+        'flush:flush one or more indices'
+        'forcemerge:force a merge on the shards of one or more indices'
+        'get:get information about one or more indices'
+        'get_mapping:get mapping definitions for one or more indices'
+        'get_settings:get setting information for one or more indices'
+        'list:list all indices'
+        'open:open a closed index'
+        'refresh:refresh one or more indices'
+        'update_mapping:add new fields to an existing index'
+        'update_settings:change a dynamic index settings in real time'
+      )
+      _describe -t elastic-document-subcommands 'subcommands' subcommands && ret=0
+      ;;
+    args)
+      local subcommand="${line[1]//-/_}"
+      local completion_func
+      curcontext="${curcontext%:*}-${subcommand}:${curcontext##*:}"
+
+      case $subcommand in
+        list)
+          # No completions for list
+          ret=1
+          ;;
+        *)
+          _call_function ret "_elastic_${command}_any"
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_elastic_index_any() {
+  local curcontext=$curcontext state line ret=1
+  _alternative -O opts : \
+    'indices: :_elastic__indices' \
+    'aliases: :_elastic__aliases' && return ret
+}
+
+_elastic_search() {
+  local curcontext=$curcontext state line ret=1
+  _alternative -O opts : \
+    'indices: :_elastic__indices' \
+    'aliases: :_elastic__aliases' && return ret
+}
+
+# helper functions
+_elastic__indices() {
+  local -a indices
+  local opts=$1
+  indices=($(elastic $(echo $opts) index list 2>/dev/null | awk '{print $3}'))
+  _wanted indices expl 'indices' compadd -a indices
+}
+
+_elastic__aliases() {
+  local -a aliases
+  local opts=$1
+  aliases=($(elastic $(echo $opts) alias list 2>/dev/null | awk '{print $1}'))
+  _wanted aliases expl 'aliases' compadd -a aliases
+}
+
+# main completion function
+_elastic() {
+  local curcontext="$curcontext" state state_descr line expl
+  local ret=1
+
+  _arguments -C -A "-*" : \
+    '--cluster[specify cluster URL]:cluster:' \
+    '--dry-run[only print out curl commands, without running them]' \
+    '--verbose[print out curl commands to stderr]' \
+    '(-): :->command' \
+    '(-)*:: :->subcommand-or-args' && _bye && return 0
+
+  case "$state" in
+    command)
+      __elastic_commands && _bye && return 0
+      ;;
+    subcommand-or-args)
+      local command="${line[1]//-/_}"
+      local -a opts
+
+      if [[ ! -z "${opt_args[--cluster]}" ]]; then
+        opts+=("--cluster ${(e)opt_args[--cluster]}")
+      fi
+
+      # change context to e.g. elastic-alias
+      curcontext="${curcontext%:*}-${command}:${curcontext##*:}"
+
+      local completion_func="_elastic_${command//-/_}"
+      _call_function ret "${completion_func}" && _bye && return ret
+
+      _bye && return 1
+      ;;
+  esac
+}
+
+_elastic "$@"
