@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+function elastic_tasks_help() {
+  cat << EOF
+Usage:
+  elastic [<options>] tasks <subcommand> [<args>]
+
+Task management
+  tasks list                              Lists all tasks currently executing in the cluster
+  tasks get <task-id>                     Returns information about specific task
+
+Examples:
+  elastic tasks list
+  elastic tasks get task-id
+EOF
+}
+
+function elastic_tasks() {
+  if [ $# -eq 0 ]; then
+    SUBCMD="list"
+  else
+    SUBCMD="$1"; shift
+  fi
+
+  FUNC="elastic_tasks_${SUBCMD}"
+  run_func $FUNC "$@"
+}
+
+function elastic_tasks_list() {
+  get _tasks
+}
+
+function elastic_tasks_get() {
+  ID="$1"
+  get _tasks/$ID
+}

@@ -60,6 +60,10 @@ Search API
 Count API
   count <index> [<body>]                  Counts the documents matching the query defined in the request
 
+Task API
+  task list                               Lists all tasks currently executing in the cluster
+  task get <task-id>                      Returns information about specific task
+
 Arbitrary HTTP requests
   curl get <path> [<curl args>]           Makes arbitrary GET request
   curl post <path> [<curl args>]          Makes arbitrary POST request
