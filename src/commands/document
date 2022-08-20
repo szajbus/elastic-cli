@@ -8,6 +8,7 @@ Usage:
 Single document APIs
   document get <index> <id>               Retrieves the specified JSON document from an index
   document delete <index> <id>            Removes a JSON document from the specified index
+  document delete_by_query <index> <body> Deletes document matching the query from the specified index
   document index <index> <body>           Creates new document in an index with auto-generated id
   document insert <index> <id> <body>     Creates new document in an index
   document upsert <index> <id> <body>     Creates new or replaces exising document in an index
@@ -39,6 +40,12 @@ function elastic_document_delete() {
   INDEX="$1"; assert "$INDEX" "missing index argument"
   ID="$2"; assert "$ID" "missing id argument"
   delete $INDEX/_doc/$ID
+}
+
+function elastic_document_delete_by_query() {
+  INDEX="$1"; assert "$INDEX" "missing index argument"
+  BODY="$2"; assert "$BODY" "missing body argument"
+  post $INDEX/_delete_by_query --data "$BODY"
 }
 
 function elastic_document_index() {

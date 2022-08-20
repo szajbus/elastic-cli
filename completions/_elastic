@@ -102,6 +102,7 @@ _elastic_document() {
       local -a subcommands
       subcommands=(
         'delete:delete document from an index'
+        'delete_by_query:delete matching documents from an index'
         'get:get document from an index'
         'index:create new document in an index with auto-generated id'
         'insert:create new document in an index'

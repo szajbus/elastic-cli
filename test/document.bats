@@ -21,6 +21,19 @@ load "test_helper"
   assert_line '"found":false'
 }
 
+@test "document delete_by_query" {
+  local index=$(gen_name)
+  run bin/elastic index create $index
+
+  run bin/elastic document insert $index 1 '{"name": "john wayne", "movie": "the shootist"}'
+  run bin/elastic document insert $index 2 '{"name": "lauren bacall", "movie": "the shootist"}'
+  run bin/elastic document insert $index 3 '{"name": "gregory peck", "movie": "cape fear"}'
+  run bin/elastic index refresh $index
+
+  run bin/elastic document delete_by_query $index '{"query": {"match": {"movie": "the shootist"}}}'
+  assert_line '"deleted":2'
+}
+
 @test "document get (bad id)" {
   local index=$(gen_name)
   run bin/elastic index create $index
