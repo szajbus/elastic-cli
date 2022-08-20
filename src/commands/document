@@ -56,21 +56,21 @@ function elastic_document_index() {
 
 function elastic_document_insert() {
   INDEX="$1"; assert "$INDEX" "missing index argument"
-  ID="$2"; assert "$ID" "missing index argument"
+  ID="$2"; assert "$ID" "missing id argument"
   BODY="$3"; assert "$BODY" "missing body argument"
   put $INDEX/_create/$ID --data "$BODY"
 }
 
 function elastic_document_upsert() {
   INDEX="$1"; assert "$INDEX" "missing index argument"
-  ID="$2"; assert "$ID" "missing index argument"
+  ID="$2"; assert "$ID" "missing id argument"
   BODY="$3"; assert "$BODY" "missing body argument"
   put $INDEX/_doc/$ID --data "$BODY"
 }
 
 function elastic_document_update() {
   INDEX="$1"; assert "$INDEX" "missing index argument"
-  ID="$2"; assert "$ID" "missing index argument"
+  ID="$2"; assert "$ID" "missing id argument"
   BODY="$3"; assert "$BODY" "missing body argument"
   post $INDEX/_update/$ID --data "$BODY"
 }
