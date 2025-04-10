@@ -15,6 +15,7 @@ __elastic_commands() {
 
 _elastic_alias() {
   local curcontext=$curcontext state line ret=1
+  local opts="$1"
 
   _arguments -C \
     ': :->subcommand' \
@@ -37,7 +38,7 @@ _elastic_alias() {
       local completion_func="_elastic_${command}_${subcommand}"
 
       curcontext="${curcontext%:*}-${subcommand}:${curcontext##*:}"
-      _call_function ret "${completion_func}"
+      _call_function ret "${completion_func}" "$opts"
       ;;
   esac
 
@@ -46,37 +47,47 @@ _elastic_alias() {
 
 _elastic_alias_add() {
   local curcontext=$curcontext state line
+  local opts="$1"
+
   _arguments -C -O opts : \
-    ': :_elastic__aliases' \
-    ': :_elastic__indices' && return 0
+    ': :_elastic__aliases $opts' \
+    ': :_elastic__indices $opts' && return 0
 }
 
 _elastic_alias_delete() {
   local curcontext=$curcontext state line
+  local opts="$1"
+
   _arguments -C -O opts : \
-    ': :_elastic__aliases' \
-    ': :_elastic__indices' && return 0
+    ': :_elastic__aliases $opts' \
+    ': :_elastic__indices $opts' && return 0
 }
 
 _elastic_alias_get() {
   local curcontext=$curcontext state line
+  local opts="$1"
+
   _arguments -C -O opts : \
-    ': :_elastic__aliases' && return 0
+    ': :_elastic__aliases $opts' && return 0
 }
 
 _elastic_alias_switch() {
   local curcontext=$curcontext state line
+  local opts="$1"
+
   _arguments -C -O opts : \
-    ': :_elastic__aliases' \
-    ': :_elastic__indices' \
-    ': :_elastic__indices' && return 0
+    ': :_elastic__aliases $opts' \
+    ': :_elastic__indices $opts' \
+    ': :_elastic__indices $opts' && return 0
 }
 
 _elastic_count() {
   local curcontext=$curcontext state line
+  local opts="$1"
+
   _alternative -O opts : \
-    'indices: :_elastic__indices' \
-    'aliases: :_elastic__aliases' && return 0
+    'indices: :_elastic__indices $opts' \
+    'aliases: :_elastic__aliases $opts' && return 0
 }
 
 _elastic_curl() {
@@ -92,6 +103,7 @@ _elastic_curl() {
 
 _elastic_document() {
   local curcontext=$curcontext state line ret=1
+  local opts="$1"
 
   _arguments -C \
     ': :->subcommand' \
@@ -124,7 +136,7 @@ _elastic_document() {
           ret=1
           ;;
         *)
-          _call_function ret "_elastic_${command}_any"
+          _call_function ret "_elastic_${command}_any" "$opts"
           ;;
       esac
       ;;
@@ -135,13 +147,16 @@ _elastic_document() {
 
 _elastic_document_any() {
   local curcontext=$curcontext state line
+  local opts="$1"
+
   _alternative -O opts : \
-    'indices: :_elastic__indices' \
-    'aliases: :_elastic__aliases' && return 0
+    "indices: :_elastic__indices $opts" \
+    "aliases: :_elastic__aliases $opts" && return 0
 }
 
 _elastic_index() {
   local curcontext=$curcontext state line ret=1
+  local opts="$1"
 
   _arguments -C \
     ': :->subcommand' \
@@ -179,7 +194,7 @@ _elastic_index() {
           ret=1
           ;;
         *)
-          _call_function ret "_elastic_${command}_any"
+          _call_function ret "_elastic_${command}_any" "$opts"
           ;;
       esac
       ;;
@@ -190,46 +205,76 @@ _elastic_index() {
 
 _elastic_index_any() {
   local curcontext=$curcontext state line
+  local opts="$1"
+
   _alternative -O opts : \
-    'indices: :_elastic__indices' \
-    'aliases: :_elastic__aliases' && return 0
+    "indices: :_elastic__indices $opts" \
+    "aliases: :_elastic__aliases $opts" && return 0
 }
 
 _elastic_search() {
   local curcontext=$curcontext state line
+  local opts="$1"
+
   _alternative -O opts : \
-    'indices: :_elastic__indices' \
-    'aliases: :_elastic__aliases' && return 0
+    "indices: :_elastic__indices $opts" \
+    "aliases: :_elastic__aliases $opts" && return 0
 }
 
 # helper functions
 _elastic__indices() {
   local -a indices
-  local opts="$1"
-  indices=($(elastic $(echo $opts) index list 2>/dev/null | awk '{print $3}'))
+  local opts=(${(s: :)1})
+
+  _debug "[call] elastic $opts index list"
+
+  indices=($(elastic $opts index list 2>/dev/null | awk '{print $3}'))
   _wanted indices expl 'indices' compadd -a indices
 }
 
 _elastic__aliases() {
   local -a aliases
-  local opts="$1"
-  aliases=($(elastic $(echo $opts) alias list 2>/dev/null | awk '{print $1}'))
+  local opts=(${(s: :)1})
+
+  _debug "[call] elastic $opts alias list"
+
+  aliases=($(elastic $opts alias list 2>/dev/null | awk '{print $1}'))
   _wanted aliases expl 'aliases' compadd -a aliases
+}
+
+_debug() {
+  if [[ -n $ELASTIC_DEBUG ]]; then
+    print "[$(date '+%Y-%m-%d %H:%M:%S')] $@" >> /tmp/elastic-cli-completion-debug.log
+  fi
 }
 
 # main completion function
 _elastic() {
   local curcontext="$curcontext" state state_descr line expl
   local ret=1
+  local -a opts
 
   _arguments -C -A "-*" : \
-    '--cluster[specify cluster URL]:cluster:' \
-    '--dry-run[only print out curl commands, without running them]' \
-    '--help[show help]' \
-    '--verbose[print out curl commands to stderr]' \
-    '--version[show version]' \
+    '(-c --cluster)'{-c,--cluster}'[specify cluster URL]:cluster:' \
+    '(-n --dry-run)'{-n,--dry-run}'[only print out curl commands, without running them]' \
+    '(-h --help)'{-h,--help}'[show help]' \
+    '(-v --verbose)'{-v,--verbose}'[print out curl commands to stderr]' \
+    '(-V --version)'{-V,--version}'[show version]' \
     '(-): :->command' \
     '(-)*:: :->subcommand-or-args' && return 0
+
+  if [[ -n $opt_args[--cluster] ]]; then
+    local raw_cluster=$opt_args[--cluster]
+    local expanded_cluster
+
+    if [[ $raw_cluster == *\$* ]]; then
+      expanded_cluster=${(e):-$raw_cluster}
+    else
+      expanded_cluster=$raw_cluster
+    fi
+
+    opts+=("--cluster $expanded_cluster")
+  fi
 
   case "$state" in
     command)
@@ -237,21 +282,12 @@ _elastic() {
       ;;
     subcommand-or-args)
       local command="${line[1]//-/_}"
-      local -a opts
-
-      if [[ ! -z "${opt_args[--cluster]}" ]]; then
-        opts+=("--cluster ${(e)opt_args[--cluster]}")
-      else
-        # Add empty string, so that we always control the first argument
-        # passed to functions that receive $opts
-        opts+=("")
-      fi
 
       # change context to e.g. elastic-alias
       curcontext="${curcontext%:*}-${command}:${curcontext##*:}"
 
       local completion_func="_elastic_${command}"
-      _call_function ret "${completion_func}" && return ret
+      _call_function ret "${completion_func}" "${(j: :)opts}" && return ret
 
       return 1
       ;;
