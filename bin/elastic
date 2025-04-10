@@ -29,7 +29,7 @@ while [[ $# -gt 0 ]]; do
     -v|--verbose)
       VERBOSE=1; shift
       ;;
-    -d|--dry-run)
+    -n|--dry-run)
       DRY_RUN=1; shift
       VERBOSE=1
       ;;
