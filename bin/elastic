@@ -33,7 +33,7 @@ while [[ $# -gt 0 ]]; do
       DRY_RUN=1; shift
       VERBOSE=1
       ;;
-    --version)
+    -V|--version)
       cat "$ELASTIC_DIR/VERSION"
       exit 0
       ;;
