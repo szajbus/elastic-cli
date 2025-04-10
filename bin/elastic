@@ -23,8 +23,16 @@ while [[ $# -gt 0 ]]; do
   arg="$1"
 
   case $arg in
+    -c=*|--cluster=*)
+      CLUSTER="${arg#*=}"
+      assert "$CLUSTER" "missing value for --cluster option"
+      shift
+      ;;
     -c|--cluster)
-      CLUSTER="$2"; assert "$CLUSTER" "missing value for --cluster option"; shift; shift
+      CLUSTER="$2"
+      assert "$CLUSTER" "missing value for --cluster option"
+      shift
+      shift
       ;;
     -v|--verbose)
       VERBOSE=1; shift
