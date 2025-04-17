@@ -132,7 +132,6 @@ Alias management
 Single document APIs
   document get <index> <id>               Retrieves the specified JSON document from an index
   document delete <index> <id>            Removes a JSON document from the specified index
-  document delete_by_query <index> <body> Deletes documents matching the query from the specified index
   document index <index> <body>           Creates new document in an index with auto-generated id
   document insert <index> <id> <body>     Creates new document in an index
   document upsert <index> <id> <body>     Creates new or replaces exising document in an index
@@ -147,6 +146,9 @@ Search API
 
 Count API
   count <index> [<body>]                  Counts the documents matching the query defined in the request
+
+Cluster info
+  info                                    Show cluster info, equivalent to \`curl get /\`
 
 Arbitrary HTTP requests
   curl get <path> [<curl args>]           Makes arbitrary GET request

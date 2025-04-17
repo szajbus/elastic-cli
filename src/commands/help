@@ -60,6 +60,9 @@ Search API
 Count API
   count <index> [<body>]                  Counts the documents matching the query defined in the request
 
+Cluster info
+  info                                    Show cluster info, equivalent to \`curl get /\`
+
 Arbitrary HTTP requests
   curl get <path> [<curl args>]           Makes arbitrary GET request
   curl post <path> [<curl args>]          Makes arbitrary POST request
@@ -69,11 +72,11 @@ Arbitrary HTTP requests
 Application options:
   -c, --cluster   Specify Elasticsearch cluster URL, http://localhost:9200 is default
   -v, --verbose   Prints out all curl commands to stderr
-  -d, --dry-run   Only prints out all curl commands to stderr, without running them
+  -n, --dry-run   Only prints out all curl commands to stderr, without running them
 
 Help options:
   -h, --help      Shows this message
-      --version   Shows version number
+  -V, --version   Shows version number
 
 See 'elastic help <command>' for command usage examples.
 EOF

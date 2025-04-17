@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+function elastic_info_help() {
+  cat << EOF
+Usage:
+  elastic [<options>] info
+
+Show cluster info, equivalent to \`curl get /\`
+
+Examples:
+  elastic --cluster http://mycluster:9200 info
+EOF
+}
+
+function elastic_info() {
+  get /
+}
